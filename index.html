@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music player</title>
@@ -11,29 +10,26 @@
         crossorigin="anonymous" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css">
-
+    <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 
 <body>
     <div class="player">
-        <!-- DASHBOARD -->
+        <!-- Dashboard -->
         <div class="dashboard">
-            <!-- HEADER -->
+            <!-- Header -->
             <header>
-                <h4>
-                    Now playing:
-                </h4>
-                <h2>
-                    String 57th & 9th
-                </h2>
+                <h4>Now playing:</h4>
+                <h2>String 57th & 9th</h2>
             </header>
+
             <!-- CD -->
             <div class="cd">
                 <div class="cd-thumb">
                 </div>
             </div>
-            <!-- CONTROL -->
+
+            <!-- Control -->
             <div class="control">
                 <div class="btn btn-repeat">
                     <i class="fas fa-redo"></i>
@@ -52,20 +48,17 @@
                     <i class="fas fa-random"></i>
                 </div>
             </div>
-            <!-- INPUT -->
+
             <input id="progress" class="progress" type="range" value="0" step="1" min="0" max="100">
-            <!-- AUDIO -->
+
             <audio id="audio" src=""></audio>
         </div>
-        <!-- PLAYLIST -->
-        <div class="playlist">
 
+        <!-- Playlist -->
+        <div class="playlist">
         </div>
     </div>
-
     <script src="./main.js"></script>
 </body>
 
 </html>
-
-
