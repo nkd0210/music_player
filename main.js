@@ -1,13 +1,20 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
+const heading = document.querySelector('header h2');
+const cdThumb = document.querySelector('.cd-thumb');
+const audio = document.querySelector('#audio');
+const cd = document.querySelector('.cd');
+const playBtn = document.querySelector('.btn-toggle-play');
+const player = document.querySelector('.player');
+
 
 const app = {
     songs: [
         {
             name: 'DONT WASTE MY TIME',
             singer: '16 TYPH',
-            path: 'https://youtu.be/y-Tut29zvPE',
+            path: 'Bigcityboi - Binz, Touliver.mp3',
             image: './assets/img/16typh.jpg'
         },
         {
@@ -65,6 +72,9 @@ const app = {
             image: './assets/img/hieut2.jpg'
         }
     ],
+
+    currentIndex: 0,
+
     render: function () {
         const htmls = this.songs.map(function (song) {
             return `
@@ -85,20 +95,52 @@ const app = {
     },
 
     handleEvents: function () {
-        const cd = document.querySelector('.cd');
+        const _this = this;
+        // Xử lý phóng to / thu nhỏ CD
         const cdWidth = cd.offsetWidth;
-        document.onscroll = function() {
+        document.onscroll = function () {
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
-            const newCdWidth = cdWidth -scrollTop;
+            const newCdWidth = cdWidth - scrollTop;
             cd.style.width = newCdWidth > 0 ? newCdWidth + 'px' : 0;
             cd.style.opacity = newCdWidth / cdWidth;
         }
+
+        // Xử lý khi click nút play
+        playBtn.onclick = function () {
+            if (_this.isPlaying) {
+                audio.pause();
+            } else {
+                audio.play();
+            }
+        };
+    },
+
+    defineProperties: function () {
+        Object.defineProperty(this, 'currentSong', {
+            get: function () {
+                return this.songs[this.currentIndex];
+            }
+        })
+    },
+
+    loadCurrentSong: function () {
+        heading.textContent = this.currentSong.name;
+        cdThumb.style.backgroundImage = `url(${this.currentSong.image})`;
+        audio.src = this.currentSong.path;
     },
 
     start: function () {
+        // Định nghĩa các thuộc tính cho project
+        this.defineProperties();
+
+        // Lắng nghe / xử lý các sự kiện (DOM events)
         this.handleEvents();
 
+        // Render playlist
         this.render();
+
+        // Tải thông tin bài hát đầu tiên vào UI khi chạy ứng dụng
+        this.loadCurrentSong();
     }
 }
 
