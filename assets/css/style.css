@@ -10,7 +10,7 @@
 }
 
 body {
-    background-color: #f5f5f5;
+    background: linear-gradient(45deg, rgb(173 83 130) 0%, rgb(176 128 128) 50%, rgb(255, 204, 112) 100%);
 }
 
 html {
@@ -38,7 +38,7 @@ html {
 
 .dashboard {
     padding: 16px 16px 14px;
-    background-color: #fff;
+    background-color: #dcc4bf;
     position: fixed;
     top: 0;
     width: 100%;
@@ -110,7 +110,7 @@ header h2 {
 
 .progress {
     width: 100%;
-    -webkit-appearance: none;
+    /* -webkit-appearance: none; */
     height: 6px;
     background: #d3d3d3;
     outline: none;
@@ -138,7 +138,7 @@ header h2 {
     display: flex;
     align-items: center;
     margin-bottom: 12px;
-    background-color: #fff;
+    background-color: #dcc4bf;
     padding: 8px 16px;
     border-radius: 5px;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
