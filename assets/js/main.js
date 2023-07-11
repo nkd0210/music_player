@@ -10,51 +10,83 @@ const progress = document.querySelector('#progress');
 const nextBtn = document.querySelector('.btn-next');
 const prevBtn = document.querySelector('.btn-prev');
 const randomBtn = document.querySelector('.btn-random');
-
+const repeatBtn = document.querySelector('.btn-repeat');
+const playlist = document.querySelector('.playlist');
 
 const app = {
 
     currentIndex: 0,
     isPlaying: false,
     isRandom: false,
+    isRepeat: false,
 
     songs: [
         {
-            name: 'Tai vi sao',
+            name: 'TẠI VÌ SAO',
             singer: 'MCK',
             path: './assets/music/TaiViSao-MCK-7963973.mp3',
             image: './assets/img/mck.jpg'
         },
         {
-            name: 'KhongTheSay',
+            name: 'KHÔNG THỂ SAY',
             singer: 'HIEUTHUHAI',
             path: './assets/music/KhongTheSay-HIEUTHUHAI-9293024.mp3',
             image: './assets/img/hieut2.jpg'
         },
         {
-            name: 'MotNgayChangNang',
+            name: 'MỘT NGÀY CHẲNG NẮNG',
             singer: 'Phao',
             path: './assets/music/MotNgayChangNang-Phao-9400644.mp3',
             image: './assets/img/phao.jpg'
         },
         {
-            name: 'NeuLucDo',
+            name: 'NẾU LÚC ĐÓ',
             singer: 'Tlinh',
             path: './assets/music/NeuLucDo-tlinh2pillz-8783613.mp3',
             image: './assets/img/tlinh.jpg'
         },
         {
-            name: 'UngQuaChung',
+            name: 'ƯNG QUÁ CHỪNG',
             singer: 'AMEE',
             path: './assets/music/UngQuaChung-AMEE-8783624.mp3',
             image: './assets/img/amee.jpg'
         },
+        {
+            name: 'BẬT TÌNH YÊU LÊN',
+            singer: 'TĂNG DUY TÂN, HÒA MINZY',
+            path: './assets/music/BatTinhYeuLen-TangDuyTanHoaMinzy-8715666.mp3',
+            image: './assets/img/tangduytan.jpg'
+        },
+        {
+            name: 'MÙA HÈ TUYỆT VỜI',
+            singer: 'ĐỨC PHÚC',
+            path: './assets/music/MuaHeTuyetVoiLalawonder-DucPhuc-9835888.mp3',
+            image: './assets/img/ducphuc.jpg'
+        },
+        {
+            name: 'ĐƯA EM VỀ NHÀ',
+            singer: 'GREYD',
+            path: './assets/music/DuaEmVeNhaa-GREYDChillies-9214678.mp3',
+            image: './assets/img/greyd.jpg'
+        },
+        {
+            name: 'HONG BÉ ƠI',
+            singer: 'Cain, LCKing, Antoneus Maximus',
+            path: './assets/music/HongBeOi-CainLCKingAntoneusMaximus-8053362.mp3',
+            image: './assets/img/LCKing.jpg'
+        },
+        {
+            name: 'SEE TÌNH',
+            singer: 'HOÀNG THÙY LINH',
+            path: './assets/music/SeeTinh-HoangThuyLinh-7702265.mp3',
+            image: './assets/img/hoangthuylinh.jpg' 
+        },
     ],
 
     render: function () {
-        const htmls = this.songs.map(function (song) {
+        const htmls = this.songs.map((song, index) => {
             return `
-                <div class="song">
+                <div class="song ${ index === this.currentIndex ? 'active' : ''}">
                     <div class="thumb" style="background-image: url('${song.image}')"></div>
                     <div class="body">
                         <h3 class="title">${song.name}</h3>
@@ -66,7 +98,7 @@ const app = {
                 </div>
             `
         });
-        document.querySelector('.playlist').innerHTML = htmls.join('');
+        playlist.innerHTML = htmls.join('');
     },
 
     defineProperties: function () {
@@ -140,12 +172,26 @@ const app = {
 
         // Xử lý khi next sang bài hát khác
         nextBtn.onclick = function () {
-            _this.nextSong();
+            if(_this.isRandom) {
+                _this.playRandomSong()
+            }else{
+                _this.nextSong();
+            }
+            audio.play()
+            _this.render()
+            _this.scrollToActiveSong()
         }
 
         // Xử lý khi quay lại bài hát trước 
         prevBtn.onclick = function () {
-            _this.prevSong();
+            if(_this.isRandom) {
+                _this.playRandomSong()
+            }else{
+                _this.prevSong();
+            }
+            audio.play()
+            _this.render()
+            _this.scrollToActiveSong()
         }
 
         // Xử lý khi random 1 bài hát
@@ -158,6 +204,41 @@ const app = {
                 randomBtn.classList.add('active')
             }
         }
+
+        // Xử lý bài hát tiếp theo khi 1 bài hát kết thúc
+        audio.onended = function () {
+            if(_this.isRepeat) {
+                audio.play()
+            }else{
+                nextBtn.click()
+            }
+        }
+
+        // Xử lý khi repeat bài hát
+        repeatBtn.onclick = function () {
+            if(_this.isRepeat) {
+                _this.isRepeat = false;
+                repeatBtn.classList.remove('active')
+            }else {
+                _this.isRepeat = true;
+                repeatBtn.classList.add('active')
+            }
+        }
+
+        // Lắng nghe hành vi click của bài hát
+        playlist.onclick = function () {
+            
+        }
+
+    },
+
+    scrollToActiveSong: function () {
+        setTimeout(() => {
+            $('.song.active').scrollIntoView({
+                behavior:'smooth',
+                block: 'nearest'
+            })
+        },100)
     },
 
     loadCurrentSong: function () {
@@ -182,6 +263,17 @@ const app = {
         this.loadCurrentSong()
     },
 
+    playRandomSong: function () {
+        let newIndex
+        do {
+            newIndex = Math.floor(Math.random() * app.songs.length)
+        }while(newIndex === this.currentIndex)
+
+        this.currentIndex = newIndex
+        this.loadCurrentSong()
+    },
+
+    
     start: function () {
 
         //  Định nghĩa các thuộc tính cho object 
