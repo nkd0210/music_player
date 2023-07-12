@@ -234,9 +234,7 @@ const app = {
                     _this.currentIndex = Number(songNode.getAttribute('data-index'))
                     _this.loadCurrentSong()
                     _this.render()
-                    audio.play()
-
-                                        _
+                    audio.play()                 
                 }
             }
         }
