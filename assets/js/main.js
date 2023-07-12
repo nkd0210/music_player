@@ -86,7 +86,7 @@ const app = {
     render: function () {
         const htmls = this.songs.map((song, index) => {
             return `
-                <div class="song ${ index === this.currentIndex ? 'active' : ''}">
+                <div class="song ${ index === this.currentIndex ? 'active' : ''}" data-index = "${index}">
                     <div class="thumb" style="background-image: url('${song.image}')"></div>
                     <div class="body">
                         <h3 class="title">${song.name}</h3>
@@ -226,12 +226,24 @@ const app = {
         }
 
         // Lắng nghe hành vi click của bài hát
-        playlist.onclick = function () {
-            
+        playlist.onclick = function (e) {
+            const songNode = e.target.closest('.song:not(.active');
+            if(e.target.closest('.song:not(.active') || e.target.closest('.option')){
+                // Xử lý khi click vào bài hát
+                if(songNode) {
+                    _this.currentIndex = Number(songNode.getAttribute('data-index'))
+                    _this.loadCurrentSong()
+                    _this.render()
+                    audio.play()
+
+                                        _
+                }
+            }
         }
 
     },
 
+    // Xử lý khi 1 bài hát được bật và di chuyển đến bài hát đó
     scrollToActiveSong: function () {
         setTimeout(() => {
             $('.song.active').scrollIntoView({
@@ -241,12 +253,14 @@ const app = {
         },100)
     },
 
+    // Xử lý khi load bài hát hiện tại
     loadCurrentSong: function () {
         heading.textContent = this.currentSong.name
         cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`
         audio.src = this.currentSong.path;
     },
 
+    // Xử lý khi click nút next song
     nextSong: function () {
         this.currentIndex++;
         if(this.currentIndex >= this.songs.length) {
@@ -255,6 +269,7 @@ const app = {
         this.loadCurrentSong();
     },
 
+    // Xử lý khi click nút previous song
     prevSong: function () {
         this.currentIndex--;
         if(this.currentIndex < 0) {
@@ -263,6 +278,7 @@ const app = {
         this.loadCurrentSong()
     },
 
+    // Xử lý khi click nút random song
     playRandomSong: function () {
         let newIndex
         do {
